@@ -1,6 +1,8 @@
 package com.bookingapp.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.*;
 
@@ -20,10 +22,16 @@ public class LoginActivity extends AppCompatActivity {
     TextView tvGoRegister;
 
     AppDatabase db;
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        // Xóa trạng thái đăng nhập cũ ngay khi app khởi chạy vào màn hình Login
+        sharedPreferences.edit().putBoolean("isLoggedIn", false).apply();
+
         setContentView(R.layout.activity_login);
 
         edtEmail = findViewById(R.id.edtEmail);
@@ -47,9 +55,8 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        edtEmail.setText("");
-        edtPassword.setText("");
+        if (edtEmail != null) edtEmail.setText("");
+        if (edtPassword != null) edtPassword.setText("");
     }
 
     private void login() {
@@ -65,6 +72,12 @@ public class LoginActivity extends AppCompatActivity {
         User user = userDao.login(email, password);
 
         if (user != null) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("isLoggedIn", true);
+            editor.putInt("userId", user.id);
+            editor.putString("userName", user.name);
+            editor.apply();
+
             Toast.makeText(this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
 
             Intent intent = new Intent(this, MainActivity.class);
