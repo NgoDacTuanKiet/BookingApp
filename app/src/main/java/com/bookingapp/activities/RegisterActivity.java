@@ -6,7 +6,6 @@ import android.util.Patterns;
 import android.widget.*;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
 
 import com.bookingapp.R;
 import com.bookingapp.dal.AppDatabase;
@@ -35,11 +34,7 @@ public class RegisterActivity extends AppCompatActivity {
         btnRegister = findViewById(R.id.btnRegister);
         tvLoginLink = findViewById(R.id.tvLoginLink);
 
-        db = Room.databaseBuilder(
-                getApplicationContext(),
-                AppDatabase.class,
-                "BookingDB"
-        ).allowMainThreadQueries().build();
+        db = AppDatabase.getInstance(this);
 
         btnRegister.setOnClickListener(v -> register());
 
@@ -68,7 +63,6 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         // Validate Password (min 8 characters, letters, numbers, and special chars)
-        // Pattern: ít nhất 1 chữ cái, 1 số, 1 ký tự đặc biệt, tối thiểu 8 ký tự
         String passwordPattern = "^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$";
         if (!Pattern.compile(passwordPattern).matcher(password).matches()) {
             Toast.makeText(this, "Mật khẩu phải từ 8 ký tự, bao gồm chữ, số và ký tự đặc biệt", Toast.LENGTH_LONG).show();
