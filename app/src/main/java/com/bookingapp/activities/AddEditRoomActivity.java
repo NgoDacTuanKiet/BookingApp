@@ -1,5 +1,6 @@
 package com.bookingapp.activities;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.ArrayAdapter;
@@ -36,7 +37,7 @@ public class AddEditRoomActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_edit_room);
 
-        db = AppDatabase.getInstance(this);
+        db = AppDatabase.getInstance((Context) this);
 
         spRoomType = findViewById(R.id.spRoomType);
         etPrice = findViewById(R.id.etPrice);
