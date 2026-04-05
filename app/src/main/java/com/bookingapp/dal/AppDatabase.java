@@ -4,18 +4,22 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 
 import com.bookingapp.model.Hotel;
 import com.bookingapp.model.User;
 import com.bookingapp.dal.dao.HotelDao;
 import com.bookingapp.dal.dao.UserDao;
+import com.bookingapp.dal.dao.RoomDao;
 
-@Database(entities = {User.class, Hotel.class}, version = 4, exportSchema = false)
+@Database(entities = {User.class, Hotel.class, com.bookingapp.model.Room.class}, version = 6, exportSchema = false)
+@TypeConverters({DataConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase instance;
 
     public abstract UserDao userDao();
     public abstract HotelDao hotelDao();
+    public abstract RoomDao roomDao();
 
     public static synchronized AppDatabase getInstance(Context context) {
         if (instance == null) {

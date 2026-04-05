@@ -18,6 +18,7 @@ import com.bookingapp.activities.HotelDetailActivity;
 import com.bookingapp.adapter.HotelAdapter;
 import com.bookingapp.dal.AppDatabase;
 import com.bookingapp.model.Hotel;
+import com.bookingapp.model.Room;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -46,14 +47,12 @@ public class MainActivity extends AppCompatActivity {
 
         db = AppDatabase.getInstance(this);
 
-        // Fixed background image for Header
         ImageView headerBg = findViewById(R.id.header_background);
         Glide.with(this)
                 .load("https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b")
                 .centerCrop()
                 .into(headerBg);
 
-        // Set real profile image instead of default robot icon
         ImageView profileImage = findViewById(R.id.profile_image);
         Glide.with(this)
                 .load("https://images.unsplash.com/photo-1535713875002-d1d0cf377fde")
@@ -111,13 +110,24 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadData() {
         Executors.newSingleThreadExecutor().execute(() -> {
+            // Load Hotels
             List<Hotel> hotels = db.hotelDao().getAll();
             if (hotels.isEmpty()) {
-                String json = loadJSONFromAsset();
+                String json = loadJSONFromAsset("hotels.json");
                 if (json != null) {
                     List<Hotel> hotelsFromJson = new Gson().fromJson(json, new TypeToken<List<Hotel>>(){}.getType());
                     db.hotelDao().insertAll(hotelsFromJson.toArray(new Hotel[0]));
                     hotels = db.hotelDao().getAll();
+                }
+            }
+
+            // Load Rooms
+            List<Room> allRooms = db.roomDao().getAllRooms();
+            if (allRooms.isEmpty()) {
+                String roomJson = loadJSONFromAsset("rooms.json");
+                if (roomJson != null) {
+                    List<Room> roomsFromJson = new Gson().fromJson(roomJson, new TypeToken<List<Room>>(){}.getType());
+                    db.roomDao().insertAll(roomsFromJson.toArray(new Room[0]));
                 }
             }
 
@@ -134,10 +144,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private String loadJSONFromAsset() {
+    private String loadJSONFromAsset(String fileName) {
         String json;
         try {
-            InputStream is = getAssets().open("hotels.json");
+            InputStream is = getAssets().open(fileName);
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);
