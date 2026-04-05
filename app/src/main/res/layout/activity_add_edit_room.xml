@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/purple_500"
+    android:fitsSystemWindows="true">
+
+    <!-- Header Section -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/purple_500"
+        android:paddingHorizontal="8dp">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_centerVertical="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Back"
+            android:src="@android:drawable/ic_menu_revert"
+            app:tint="@android:color/white"
+            xmlns:app="http://schemas.android.com/apk/res-auto" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Thông tin phòng"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#F5F5F5"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                xmlns:app="http://schemas.android.com/apk/res-auto">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Loại phòng"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp" />
+
+                    <Spinner
+                        android:id="@+id/spRoomType"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:minHeight="48dp"
+                        android:background="@android:drawable/btn_dropdown" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Giá ($)"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp" />
+
+                    <EditText
+                        android:id="@+id/etPrice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Nhập giá"
+                        android:inputType="numberDecimal" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Sức chứa (người)"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp" />
+
+                    <EditText
+                        android:id="@+id/etCapacity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Nhập sức chứa"
+                        android:inputType="number" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Số lượng phòng"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp" />
+
+                    <EditText
+                        android:id="@+id/etQuantity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Nhập số lượng"
+                        android:inputType="number" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Mô tả"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp" />
+
+                    <EditText
+                        android:id="@+id/etDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Nhập mô tả chi tiết"
+                        android:gravity="top"
+                        android:inputType="textMultiLine"
+                        android:lines="3" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="24dp"
+                android:text="Lưu phòng"
+                android:textSize="16sp"
+                android:textAllCaps="true"
+                android:backgroundTint="@color/purple_500"
+                android:textColor="@android:color/white" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
