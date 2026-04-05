@@ -71,11 +71,19 @@ public class LoginActivity extends AppCompatActivity {
             editor.putBoolean("isLoggedIn", true);
             editor.putInt("userId", user.id);
             editor.putString("userName", user.name);
+            editor.putString("userRole", user.role); // Lưu lại role
             editor.apply();
 
             Toast.makeText(this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
 
-            Intent intent = new Intent(this, MainActivity.class);
+            // Phân quyền chuyển hướng dựa trên Role
+            Intent intent;
+            if ("vendor".equalsIgnoreCase(user.role)) {
+                intent = new Intent(this, VendorMainActivity.class);
+            } else {
+                intent = new Intent(this, MainActivity.class);
+            }
+            
             startActivity(intent);
             finish();
 
