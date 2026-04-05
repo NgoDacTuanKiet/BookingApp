@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.widget.*;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import com.bookingapp.MainActivity;
 import com.bookingapp.R;
@@ -38,7 +39,12 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btnLogin);
         tvGoRegister = findViewById(R.id.tvGoRegister);
 
-        db = AppDatabase.getInstance(this);
+        db = Room.databaseBuilder(
+                getApplicationContext(),
+                AppDatabase.class,
+                "BookingDB"
+        ).fallbackToDestructiveMigration() // Cho phép xóa data cũ khi đổi cấu trúc
+        .allowMainThreadQueries().build();
 
         btnLogin.setOnClickListener(v -> login());
 
@@ -71,12 +77,11 @@ public class LoginActivity extends AppCompatActivity {
             editor.putBoolean("isLoggedIn", true);
             editor.putInt("userId", user.id);
             editor.putString("userName", user.name);
-            editor.putString("userRole", user.role); // Lưu lại role
+            editor.putString("userRole", user.role); 
             editor.apply();
 
             Toast.makeText(this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
 
-            // Phân quyền chuyển hướng dựa trên Role
             Intent intent;
             if ("vendor".equalsIgnoreCase(user.role)) {
                 intent = new Intent(this, VendorMainActivity.class);

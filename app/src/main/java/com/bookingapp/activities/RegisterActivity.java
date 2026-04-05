@@ -6,6 +6,7 @@ import android.util.Patterns;
 import android.widget.*;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import com.bookingapp.R;
 import com.bookingapp.dal.AppDatabase;
@@ -34,7 +35,12 @@ public class RegisterActivity extends AppCompatActivity {
         btnRegister = findViewById(R.id.btnRegister);
         tvLoginLink = findViewById(R.id.tvLoginLink);
 
-        db = AppDatabase.getInstance(this);
+        db = Room.databaseBuilder(
+                getApplicationContext(),
+                AppDatabase.class,
+                "BookingDB"
+        ).fallbackToDestructiveMigration() // Thêm dòng này để fix crash do database version
+        .allowMainThreadQueries().build();
 
         btnRegister.setOnClickListener(v -> register());
 
@@ -58,7 +64,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         // Validate Email
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            Toast.makeText(this, "Email không đúng định dạng (ví dụ: abc@gmail.com)", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Email không đúng định dạng", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -87,7 +93,7 @@ public class RegisterActivity extends AppCompatActivity {
         user.name = name;
         user.email = email;
         user.password = password;
-        user.role = "customer";
+        user.role = "customer"; // Mặc định là user, có thể sửa thành "vendor" nếu cần test role vendor
 
         userDao.insert(user);
 
