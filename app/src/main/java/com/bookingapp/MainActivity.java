@@ -1,6 +1,8 @@
 package com.bookingapp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -8,18 +10,25 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bookingapp.activities.HotelDetailActivity;
+import com.bookingapp.activities.LoginActivity;
+import com.bookingapp.activities.UserProfileActivity;
 import com.bookingapp.adapter.HotelAdapter;
 import com.bookingapp.dal.AppDatabase;
 import com.bookingapp.model.Hotel;
 import com.bookingapp.model.Room;
+import com.bookingapp.model.User;
 import com.bumptech.glide.Glide;
+import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -38,6 +47,10 @@ public class MainActivity extends AppCompatActivity {
     private List<Hotel> exploreList = new ArrayList<>();
     private AppDatabase db;
     private EditText edtSearch;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+    private ImageView profileImage;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +60,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         db = AppDatabase.getInstance(this);
+        sharedPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        profileImage = findViewById(R.id.profile_image);
 
         ImageView headerBg = findViewById(R.id.header_background);
         Glide.with(this)
@@ -54,11 +72,28 @@ public class MainActivity extends AppCompatActivity {
                 .centerCrop()
                 .into(headerBg);
 
-        ImageView profileImage = findViewById(R.id.profile_image);
-        Glide.with(this)
-                .load("https://images.unsplash.com/photo-1535713875002-d1d0cf377fde")
-                .circleCrop()
-                .into(profileImage);
+        updateProfileImage();
+
+        // Mở Drawer khi nhấn vào ảnh profile
+        profileImage.setOnClickListener(v -> {
+            drawerLayout.openDrawer(GravityCompat.START);
+        });
+
+        // Xử lý click trong Drawer Menu
+        navigationView.setNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.nav_logout) {
+                logout();
+            } else if (id == R.id.nav_profile) {
+                startActivity(new Intent(this, UserProfileActivity.class));
+            } else if (id == R.id.nav_booking_history) {
+                Toast.makeText(this, "Chức năng Lịch sử Booking đang phát triển", Toast.LENGTH_SHORT).show();
+            } else if (id == R.id.nav_change_password) {
+                Toast.makeText(this, "Chức năng Đổi mật khẩu đang phát triển", Toast.LENGTH_SHORT).show();
+            }
+            drawerLayout.closeDrawer(GravityCompat.START);
+            return true;
+        });
 
         edtSearch = findViewById(R.id.edtSearch);
         rvTopRated = findViewById(R.id.rvTopRated);
@@ -96,6 +131,44 @@ public class MainActivity extends AppCompatActivity {
         });
 
         loadData();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateProfileImage(); // Cập nhật lại ảnh nếu vừa đổi ở UserProfileActivity
+    }
+
+    private void updateProfileImage() {
+        int userId = sharedPreferences.getInt("userId", -1);
+        if (userId != -1) {
+            User user = db.userDao().getUserById(userId);
+            if (user != null && user.avatarUrl != null && !user.avatarUrl.isEmpty()) {
+                Glide.with(this)
+                        .load(user.avatarUrl)
+                        .circleCrop()
+                        .placeholder(android.R.drawable.ic_menu_report_image)
+                        .into(profileImage);
+            } else {
+                Glide.with(this)
+                        .load("https://images.unsplash.com/photo-1535713875002-d1d0cf377fde")
+                        .circleCrop()
+                        .into(profileImage);
+            }
+        }
+    }
+
+    private void logout() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+
+        Toast.makeText(this, "Đã đăng xuất", Toast.LENGTH_SHORT).show();
+        
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 
     private void searchHotels(String query) {

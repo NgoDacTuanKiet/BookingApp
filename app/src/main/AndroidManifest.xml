@@ -44,6 +44,9 @@
         <activity
             android:name=".activities.RoomDetailActivity"
             android:exported="false" />
+        <activity
+            android:name=".activities.UserProfileActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

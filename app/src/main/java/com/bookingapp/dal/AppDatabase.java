@@ -12,7 +12,7 @@ import com.bookingapp.dal.dao.HotelDao;
 import com.bookingapp.dal.dao.UserDao;
 import com.bookingapp.dal.dao.RoomDao;
 
-@Database(entities = {User.class, Hotel.class, com.bookingapp.model.Room.class}, version = 6, exportSchema = false)
+@Database(entities = {User.class, Hotel.class, com.bookingapp.model.Room.class}, version = 7, exportSchema = false)
 @TypeConverters({DataConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase instance;
