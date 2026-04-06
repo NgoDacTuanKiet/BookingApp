@@ -39,12 +39,7 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btnLogin);
         tvGoRegister = findViewById(R.id.tvGoRegister);
 
-        db = Room.databaseBuilder(
-                getApplicationContext(),
-                AppDatabase.class,
-                "BookingDB"
-        ).fallbackToDestructiveMigration() // Cho phép xóa data cũ khi đổi cấu trúc
-        .allowMainThreadQueries().build();
+        db = AppDatabase.getInstance(this);
 
         btnLogin.setOnClickListener(v -> login());
 
@@ -69,31 +64,40 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
+        // Fix cứng tài khoản Vendor để test nhanh
+        if (email.equals("admin@gmail.com") && password.equals("admin123")) {
+            saveUserAndNavigate(999, "Admin Vendor", "vendor");
+            return;
+        }
+
         UserDao userDao = db.userDao();
         User user = userDao.login(email, password);
 
         if (user != null) {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean("isLoggedIn", true);
-            editor.putInt("userId", user.id);
-            editor.putString("userName", user.name);
-            editor.putString("userRole", user.role); 
-            editor.apply();
-
-            Toast.makeText(this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-
-            Intent intent;
-            if ("vendor".equalsIgnoreCase(user.role)) {
-                intent = new Intent(this, VendorMainActivity.class);
-            } else {
-                intent = new Intent(this, MainActivity.class);
-            }
-            
-            startActivity(intent);
-            finish();
-
+            saveUserAndNavigate(user.id, user.name, user.role);
         } else {
             Toast.makeText(this, "Sai email hoặc mật khẩu", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void saveUserAndNavigate(int id, String name, String role) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("isLoggedIn", true);
+        editor.putInt("userId", id);
+        editor.putString("userName", name);
+        editor.putString("userRole", role); 
+        editor.apply();
+
+        Toast.makeText(this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+
+        Intent intent;
+        if ("vendor".equalsIgnoreCase(role)) {
+            intent = new Intent(this, VendorMainActivity.class);
+        } else {
+            intent = new Intent(this, MainActivity.class);
+        }
+        
+        startActivity(intent);
+        finish();
     }
 }

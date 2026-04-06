@@ -9,6 +9,7 @@ public class Hotel implements Serializable {
     @PrimaryKey(autoGenerate = true)
     public int id;
 
+    public int vendorId; // ID of the vendor who owns this hotel
     public String name;
     public String address;
     public String city;
@@ -26,7 +27,8 @@ public class Hotel implements Serializable {
 
     public Hotel() {}
 
-    public Hotel(String name, String address, String city, String description, double rating, String imageUrl, double price, int bedrooms, int bathrooms, int guestrooms, boolean hasWifi, boolean hasPool, boolean hasFoodCourt, boolean hasPark) {
+    public Hotel(int vendorId, String name, String address, String city, String description, double rating, String imageUrl, double price, int bedrooms, int bathrooms, int guestrooms, boolean hasWifi, boolean hasPool, boolean hasFoodCourt, boolean hasPark) {
+        this.vendorId = vendorId;
         this.name = name;
         this.address = address;
         this.city = city;

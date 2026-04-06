@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -26,17 +25,18 @@ public class VendorMainActivity extends AppCompatActivity {
         btnLogout = findViewById(R.id.btnLogout);
 
         btnManageHotels.setOnClickListener(v -> {
-            Toast.makeText(this, "Chức năng Quản lý khách sạn đang phát triển", Toast.LENGTH_SHORT).show();
-            // Intent intent = new Intent(this, ManageHotelsActivity.class);
-            // startActivity(intent);
+            Intent intent = new Intent(this, ManageHotelsActivity.class);
+            startActivity(intent);
         });
 
         btnManageRooms.setOnClickListener(v -> {
-            Toast.makeText(this, "Chức năng Quản lý phòng đang phát triển", Toast.LENGTH_SHORT).show();
+            // Intent intent = new Intent(this, ManageRoomsActivity.class);
+            // startActivity(intent);
         });
 
         btnManageBookings.setOnClickListener(v -> {
-            Toast.makeText(this, "Chức năng Quản lý Booking đang phát triển", Toast.LENGTH_SHORT).show();
+            // Intent intent = new Intent(this, ManageBookingsActivity.class);
+            // startActivity(intent);
         });
 
         btnLogout.setOnClickListener(v -> {
