@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        com.bookingapp.utils.CloudinaryHelper.init(this);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
