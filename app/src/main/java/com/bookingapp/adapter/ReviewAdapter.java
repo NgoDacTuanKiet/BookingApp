@@ -1,6 +1,7 @@
 package com.bookingapp.adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +17,22 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
 
     private Context context;
     private List<Review> reviewList;
+    private OnReviewLongClickListener longClickListener;
+    private int currentUserId;
+
+    public interface OnReviewLongClickListener {
+        void onReviewLongClick(Review review);
+    }
 
     public ReviewAdapter(Context context, List<Review> reviewList) {
         this.context = context;
         this.reviewList = reviewList;
+        SharedPreferences prefs = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        this.currentUserId = prefs.getInt("userId", -1);
+    }
+
+    public void setOnReviewLongClickListener(OnReviewLongClickListener listener) {
+        this.longClickListener = listener;
     }
 
     @NonNull
@@ -36,6 +49,14 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
         holder.tvDate.setText(review.date);
         holder.rbRating.setRating(review.rating);
         holder.tvComment.setText(review.comment);
+
+        holder.itemView.setOnLongClickListener(v -> {
+            if (longClickListener != null && review.userId == currentUserId) {
+                longClickListener.onReviewLongClick(review);
+                return true;
+            }
+            return false;
+        });
     }
 
     @Override

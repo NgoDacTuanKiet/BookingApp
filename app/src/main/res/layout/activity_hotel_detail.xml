@@ -161,7 +161,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Reviews"
+                    android:text="Ratings and reviews"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -209,9 +209,10 @@
                         android:stepSize="0.1" />
 
                     <TextView
+                        android:id="@+id/tvTotalReviews"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Average rating"
+                        android:text="12 reviews"
                         android:textSize="12sp" />
                 </LinearLayout>
             </LinearLayout>
@@ -222,6 +223,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:nestedScrollingEnabled="false" />
+
+            <Button
+                android:id="@+id/btnSeeAllReviews"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="See all reviews"
+                android:textAllCaps="false"
+                android:textColor="@android:color/holo_blue_dark"
+                android:visibility="gone" />
             <!-- HẾT PHẦN ĐÁNH GIÁ -->
 
             <LinearLayout

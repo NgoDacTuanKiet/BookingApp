@@ -1,8 +1,10 @@
 package com.bookingapp.dal.dao;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 import com.bookingapp.model.Review;
 import java.util.List;
 
@@ -10,6 +12,12 @@ import java.util.List;
 public interface ReviewDao {
     @Insert
     void insert(Review review);
+
+    @Update
+    void update(Review review);
+
+    @Delete
+    void delete(Review review);
 
     // Sắp xếp theo rating giảm dần (ưu tiên đánh giá cao), 
     // nếu bằng rating thì sắp xếp theo date giảm dần (ngày gần nhất)
