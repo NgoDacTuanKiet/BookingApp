@@ -30,8 +30,8 @@ public class VendorMainActivity extends AppCompatActivity {
         });
 
         btnManageRooms.setOnClickListener(v -> {
-            // Intent intent = new Intent(this, ManageRoomsActivity.class);
-            // startActivity(intent);
+            Intent intent = new Intent(this, ManageRoomsHotelListActivity.class);
+            startActivity(intent);
         });
 
         btnManageBookings.setOnClickListener(v -> {

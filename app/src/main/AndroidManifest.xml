@@ -50,6 +50,15 @@
         <activity
             android:name=".activities.UserProfileActivity"
             android:exported="false" />
+        <activity
+            android:name=".activities.ManageRoomsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.AddEditRoomActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ManageRoomsHotelListActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
