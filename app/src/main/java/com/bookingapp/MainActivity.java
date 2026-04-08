@@ -25,16 +25,10 @@ import com.bookingapp.activities.UserProfileActivity;
 import com.bookingapp.adapter.HotelAdapter;
 import com.bookingapp.dal.AppDatabase;
 import com.bookingapp.model.Hotel;
-import com.bookingapp.model.Room;
 import com.bookingapp.model.User;
 import com.bumptech.glide.Glide;
 import com.google.android.material.navigation.NavigationView;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -74,22 +68,16 @@ public class MainActivity extends AppCompatActivity {
 
         updateProfileImage();
 
-        // Mở Drawer khi nhấn vào ảnh profile
         profileImage.setOnClickListener(v -> {
             drawerLayout.openDrawer(GravityCompat.START);
         });
 
-        // Xử lý click trong Drawer Menu
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.nav_logout) {
                 logout();
             } else if (id == R.id.nav_profile) {
                 startActivity(new Intent(this, UserProfileActivity.class));
-            } else if (id == R.id.nav_booking_history) {
-                Toast.makeText(this, "Chức năng Lịch sử Booking đang phát triển", Toast.LENGTH_SHORT).show();
-            } else if (id == R.id.nav_change_password) {
-                Toast.makeText(this, "Chức năng Đổi mật khẩu đang phát triển", Toast.LENGTH_SHORT).show();
             }
             drawerLayout.closeDrawer(GravityCompat.START);
             return true;
@@ -136,7 +124,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        updateProfileImage(); // Cập nhật lại ảnh nếu vừa đổi ở UserProfileActivity
+        updateProfileImage();
+        loadData(); // Tải lại dữ liệu mỗi khi quay lại trang chủ để cập nhật khách sạn mới
     }
 
     private void updateProfileImage() {
@@ -162,9 +151,6 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.apply();
-
-        Toast.makeText(this, "Đã đăng xuất", Toast.LENGTH_SHORT).show();
-        
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
@@ -184,53 +170,17 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadData() {
         Executors.newSingleThreadExecutor().execute(() -> {
-            // Load Hotels
-            List<Hotel> hotels = db.hotelDao().getAll();
-            if (hotels.isEmpty()) {
-                String json = loadJSONFromAsset("hotels.json");
-                if (json != null) {
-                    List<Hotel> hotelsFromJson = new Gson().fromJson(json, new TypeToken<List<Hotel>>(){}.getType());
-                    db.hotelDao().insertAll(hotelsFromJson.toArray(new Hotel[0]));
-                    hotels = db.hotelDao().getAll();
-                }
-            }
-
-            // Load Rooms
-            List<Room> allRooms = db.roomDao().getAllRooms();
-            if (allRooms.isEmpty()) {
-                String roomJson = loadJSONFromAsset("rooms.json");
-                if (roomJson != null) {
-                    List<Room> roomsFromJson = new Gson().fromJson(roomJson, new TypeToken<List<Room>>(){}.getType());
-                    db.roomDao().insertAll(roomsFromJson.toArray(new Room[0]));
-                }
-            }
-
-            final List<Hotel> finalHotels = hotels;
+            final List<Hotel> hotels = db.hotelDao().getAll();
+            
             new Handler(Looper.getMainLooper()).post(() -> {
                 topRatedList.clear();
-                topRatedList.addAll(finalHotels);
+                topRatedList.addAll(hotels);
                 topRatedAdapter.notifyDataSetChanged();
 
                 exploreList.clear();
-                exploreList.addAll(finalHotels);
+                exploreList.addAll(hotels);
                 exploreAdapter.notifyDataSetChanged();
             });
         });
-    }
-
-    private String loadJSONFromAsset(String fileName) {
-        String json;
-        try {
-            InputStream is = getAssets().open(fileName);
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, StandardCharsets.UTF_8);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        return json;
     }
 }
