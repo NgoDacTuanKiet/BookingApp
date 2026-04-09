@@ -59,6 +59,9 @@
         <activity
             android:name=".activities.ManageRoomsHotelListActivity"
             android:exported="false" />
+        <activity
+            android:name=".activities.ChangePasswordActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
