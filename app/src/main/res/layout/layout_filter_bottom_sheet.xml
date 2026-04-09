@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bộ lọc tìm kiếm"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="24dp" />
+
+    <!-- Price Range -->
+    <TextView
+        android:id="@+id/tvPriceRange"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Khoảng giá (VNĐ)"
+        android:textStyle="bold" />
+
+    <com.google.android.material.slider.RangeSlider
+        android:id="@+id/priceRangeSlider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:valueFrom="0"
+        android:valueTo="10000000"
+        app:values="@array/initial_range_values" />
+
+    <!-- Rating -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Đánh giá tối thiểu"
+        android:textStyle="bold" />
+
+    <RatingBar
+        android:id="@+id/ratingBarFilter"
+        style="?android:attr/ratingBarStyleIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:isIndicator="false"
+        android:numStars="5"
+        android:stepSize="1"
+        android:rating="0" />
+
+    <!-- Amenities -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Tiện ích"
+        android:textStyle="bold" />
+
+    <CheckBox
+        android:id="@+id/cbWifi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Wifi miễn phí" />
+
+    <CheckBox
+        android:id="@+id/cbPool"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hồ bơi" />
+
+    <CheckBox
+        android:id="@+id/cbFoodCourt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nhà hàng" />
+
+    <CheckBox
+        android:id="@+id/cbPark"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Bãi đậu xe" />
+
+    <Button
+        android:id="@+id/btnApplyFilter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Áp dụng bộ lọc"
+        android:backgroundTint="@android:color/holo_blue_dark"
+        android:textColor="@android:color/white" />
+
+    <Button
+        android:id="@+id/btnClearFilter"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Xóa bộ lọc"
+        android:textColor="@android:color/darker_gray" />
+
+</LinearLayout>
