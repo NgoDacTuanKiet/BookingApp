@@ -19,7 +19,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bookingapp.activities.ChangePasswordActivity;
 import com.bookingapp.activities.HotelDetailActivity;
 import com.bookingapp.activities.LoginActivity;
 import com.bookingapp.activities.UserProfileActivity;
@@ -90,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
             } else if (id == R.id.nav_booking_history) {
                 Toast.makeText(this, "Chức năng Lịch sử Booking đang phát triển", Toast.LENGTH_SHORT).show();
             } else if (id == R.id.nav_change_password) {
-                startActivity(new Intent(this, ChangePasswordActivity.class));
+                Toast.makeText(this, "Chức năng Đổi mật khẩu đang phát triển", Toast.LENGTH_SHORT).show();
             }
             drawerLayout.closeDrawer(GravityCompat.START);
             return true;

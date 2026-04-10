@@ -10,7 +10,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bookingapp.R;
 import com.bookingapp.model.Hotel;
 import com.bumptech.glide.Glide;
+
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.HotelViewHolder> {
 
@@ -38,6 +41,11 @@ public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.HotelViewHol
         Hotel hotel = hotels.get(position);
         holder.tvName.setText(hotel.name);
         holder.tvLocation.setText(hotel.city + ", " + hotel.address);
+
+        // Định dạng tiền tệ VND
+        NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+        String formattedPrice = formatter.format(hotel.price);
+        holder.tvPrice.setText(formattedPrice);
         
         Glide.with(holder.itemView.getContext())
                 .load(hotel.imageUrl)
@@ -55,13 +63,14 @@ public class HotelAdapter extends RecyclerView.Adapter<HotelAdapter.HotelViewHol
 
     public static class HotelViewHolder extends RecyclerView.ViewHolder {
         ImageView ivHotel;
-        TextView tvName, tvLocation;
+        TextView tvName, tvLocation, tvPrice;
 
         public HotelViewHolder(@NonNull View itemView) {
             super(itemView);
             ivHotel = itemView.findViewById(R.id.hotelImage);
             tvName = itemView.findViewById(R.id.hotelName);
             tvLocation = itemView.findViewById(R.id.hotelLocation);
+            tvPrice = itemView.findViewById(R.id.hotelPrice);
         }
     }
 }
