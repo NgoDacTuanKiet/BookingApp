@@ -15,6 +15,7 @@ import com.bookingapp.model.User;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.concurrent.Executors;
+import java.util.regex.Pattern;
 
 public class ChangePasswordActivity extends AppCompatActivity {
 
@@ -55,8 +56,20 @@ public class ChangePasswordActivity extends AppCompatActivity {
             return;
         }
 
+        // Validate Password (min 8 characters, letters, numbers, and special chars) - Giống RegisterActivity
+        String passwordPattern = "^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$";
+        if (!Pattern.compile(passwordPattern).matcher(newPass).matches()) {
+            Toast.makeText(this, "Mật khẩu mới phải từ 8 ký tự, bao gồm chữ, số và ký tự đặc biệt", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if (newPass.equals(oldPass)) {
+            Toast.makeText(this, "Mật khẩu mới không được trùng với mật khẩu cũ", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if (!newPass.equals(confirmPass)) {
-            Toast.makeText(this, "Mật khẩu mới không khớp", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Mật khẩu xác nhận không khớp", Toast.LENGTH_SHORT).show();
             return;
         }
 

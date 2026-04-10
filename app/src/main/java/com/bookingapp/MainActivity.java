@@ -19,6 +19,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bookingapp.activities.ChangePasswordActivity;
 import com.bookingapp.activities.HotelDetailActivity;
 import com.bookingapp.activities.LoginActivity;
 import com.bookingapp.activities.UserProfileActivity;
@@ -89,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
             } else if (id == R.id.nav_booking_history) {
                 Toast.makeText(this, "Chức năng Lịch sử Booking đang phát triển", Toast.LENGTH_SHORT).show();
             } else if (id == R.id.nav_change_password) {
-                Toast.makeText(this, "Chức năng Đổi mật khẩu đang phát triển", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, ChangePasswordActivity.class));
             }
             drawerLayout.closeDrawer(GravityCompat.START);
             return true;
@@ -142,19 +143,25 @@ public class MainActivity extends AppCompatActivity {
     private void updateProfileImage() {
         int userId = sharedPreferences.getInt("userId", -1);
         if (userId != -1) {
-            User user = db.userDao().getUserById(userId);
-            if (user != null && user.avatarUrl != null && !user.avatarUrl.isEmpty()) {
-                Glide.with(this)
-                        .load(user.avatarUrl)
-                        .circleCrop()
-                        .placeholder(android.R.drawable.ic_menu_report_image)
-                        .into(profileImage);
-            } else {
-                Glide.with(this)
-                        .load("https://images.unsplash.com/photo-1535713875002-d1d0cf377fde")
-                        .circleCrop()
-                        .into(profileImage);
-            }
+            Executors.newSingleThreadExecutor().execute(() -> {
+                User user = db.userDao().getUserById(userId);
+                if (user != null) {
+                    runOnUiThread(() -> {
+                        if (user.avatarUrl != null && !user.avatarUrl.isEmpty()) {
+                            Glide.with(MainActivity.this)
+                                    .load(user.avatarUrl)
+                                    .circleCrop()
+                                    .placeholder(android.R.drawable.ic_menu_report_image)
+                                    .into(profileImage);
+                        } else {
+                            Glide.with(MainActivity.this)
+                                    .load("https://images.unsplash.com/photo-1535713875002-d1d0cf377fde")
+                                    .circleCrop()
+                                    .into(profileImage);
+                        }
+                    });
+                }
+            });
         }
     }
 
